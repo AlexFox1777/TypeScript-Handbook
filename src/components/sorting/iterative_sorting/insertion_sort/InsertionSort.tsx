@@ -18,7 +18,7 @@ const InsertionSort: FunctionComponent<Partial<Props>> = ({
     ],
 }) => {
     const [nms, setNms] = useState(numbers);
-    const [iterNum, setIterNum] = useState(1);
+    const [iter, setIter] = useState({ i: 1, j: 0, key: numbers[1].number });
 
     let insertionSort = (
         arr: Array<{ number: number; state: "current" | "previous" | "x" }>
@@ -40,24 +40,26 @@ const InsertionSort: FunctionComponent<Partial<Props>> = ({
     };
 
     let iSNext = (
-        arr: Array<{ number: number; state: "current" | "previous" | "x" }>
+        inputArr: Array<{ number: number; state: "current" | "previous" | "x" }>
     ) => {
-        if (nms.length > iterNum) {
-            let inputArr = arr.slice();
-            let length = inputArr.length;
-
-            let key = inputArr[iterNum].number;
-            inputArr[iterNum].state = "current";
-            let j = iterNum - 1;
-
+        if (iter.i < nms.length) {
+            let j = iter.j;
+            let key = iter.key;
             if (j >= 0 && inputArr[j].number > key) {
                 inputArr[j + 1].number = inputArr[j].number;
-                inputArr[j].number = key;
-                inputArr[j].state = "previous";
-                setIterNum(iterNum - 1);
+                inputArr[j + 1].state = "previous";
+                inputArr[j].state = "x";
+                setIter({ ...iter, j: j - 1 });
             } else {
-                setIterNum(iterNum + 1);
+                inputArr[j + 1].number = key;
+                setIter({
+                    ...iter,
+                    key: inputArr[iter.i + 1].number,
+                    j: iter.i,
+                    i: iter.i + 1,
+                });
             }
+            console.log("NMS ", nms);
             setNms(inputArr);
         }
     };
