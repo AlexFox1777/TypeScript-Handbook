@@ -8,10 +8,6 @@ import InsertionSort from "./components/sorting/iterative_sorting/insertion_sort
 const App: FunctionComponent = () => {
     return (
         <Root>
-            <h1>Hello</h1>
-            <h2>Hello</h2>
-            <h3>Hello</h3>
-            <h4>Hello</h4>
             <PageDescrioption algorithm={<InsertionSort />} />
         </Root>
     );
