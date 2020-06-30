@@ -37,9 +37,8 @@ const InsertionSort: FunctionComponent<Partial<Props>> = ({
     };
 
     let iSNext = (arr: Array<number>) => {
+        console.log("Hello");
         let inputArr = arr.slice();
-        // mark the i element as the current
-        // mark the j element as the previous
         let j = iter.j,
             key = iter.key,
             i = iter.i;
@@ -47,7 +46,6 @@ const InsertionSort: FunctionComponent<Partial<Props>> = ({
             if (j >= 0 && inputArr[j] > key) {
                 inputArr[j + 1] = inputArr[j];
                 setIter({ ...iter, j: j - 1 });
-                console.log("1, J = ", j, " k  = ", key);
             } else {
                 inputArr[j + 1] = key;
                 setIter({
@@ -56,14 +54,6 @@ const InsertionSort: FunctionComponent<Partial<Props>> = ({
                     j: i,
                     key: numbers[i + 1],
                 });
-                console.log(
-                    "2, J = ",
-                    j,
-                    " k  = ",
-                    key,
-                    " inputArr[j + 1 ] = ",
-                    inputArr[j + 1]
-                );
             }
 
             setHistory((prev) => [[...inputArr], ...prev]);
@@ -75,10 +65,24 @@ const InsertionSort: FunctionComponent<Partial<Props>> = ({
         setNms(inputArr);
     };
 
+    let iBack = () => {
+        if (iter.i >= 2) {
+            setIter({ i: iter.i - 2, j: iter.j - 2, key: numbers[iter.i - 2] });
+            let lastHistory = history[1].slice();
+            console.log("Last history ", lastHistory);
+            setNms(lastHistory);
+        }
+    };
+
     return (
         <Root>
             <Pannel>
-                <ArrowBtn isActive={iter.i > 2}>←</ArrowBtn>
+                <ArrowBtn
+                    onClick={() => iter.i > 2 && iBack()}
+                    isActive={iter.i > 2}
+                >
+                    ←
+                </ArrowBtn>
                 <ArrowBtn
                     onClick={() => iter.i < nms.length && iSNext(nms)}
                     isActive={iter.i < nms.length}
