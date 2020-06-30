@@ -12,6 +12,9 @@ const InsertionSort: FunctionComponent<Partial<Props>> = ({
 }) => {
     const [nms, setNms] = useState(numbers);
     const [history, setHistory] = useState([numbers]);
+    const [info, setInfo] = useState<Array<string>>([
+        `i=1, j=0, key=${numbers[1]}`,
+    ]);
     const [iter, setIter] = useState({ i: 1, j: 0, key: numbers[1] });
 
     let insertionSort = (
@@ -64,16 +67,16 @@ const InsertionSort: FunctionComponent<Partial<Props>> = ({
             }
         }
 
-        console.log("ARR ", inputArr);
-        console.log("STATE ", nms);
-
         setHistory((prev) => [[...inputArr], ...prev]);
+
+        let iterInfo = `i=${iter.i}, j=${iter.j}, key=${iter.key}`;
+        setInfo((prev) => [iterInfo, ...info]);
+
         setNms(inputArr);
     };
 
     return (
         <Root>
-            {/* {console.log("SORT ", insertionSort(numbers))} */}
             <Pannel>
                 <ArrowBtn>←</ArrowBtn>
                 <ArrowBtn onClick={() => iSNext(nms)}>→</ArrowBtn>
@@ -95,7 +98,7 @@ const InsertionSort: FunctionComponent<Partial<Props>> = ({
                         />
                     ))}
             </List>
-            <History history={history}></History>
+            <History history={history} info={info}></History>
         </Root>
     );
 };
@@ -106,9 +109,9 @@ const Root = styled.div`
     align-items: center;
     border: 2px solid #cacaca;
     border-radius: 4px;
-    padding: 1rem;
+    /* padding: 1rem; */
     width: 100%;
-    min-width: 300px;
+    min-width: 350px;
 `;
 
 const Pannel = styled.div`
@@ -120,7 +123,8 @@ const Pannel = styled.div`
 
 const List = styled.div`
     display: flex;
-    flex-wrap: row wrap;
+    flex-wrap: row;
+    justify-content: center;
 `;
 
 const ArrowBtn = styled.button`

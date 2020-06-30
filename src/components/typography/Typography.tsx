@@ -61,7 +61,7 @@ const Typography: FunctionComponent<Partial<Props>> = ({
     ...rest
 }) => {
     let s = {
-        sm: 0.5,
+        sm: 0.8,
         md: 1,
         lg: 2,
         xl: 3,

@@ -4,6 +4,7 @@ import App from "./App";
 // styles
 import { ThemeProvider } from "styled-components";
 import { Normalize } from "styled-normalize";
+import GlobalStyles from "./globalStyles";
 
 const theme = {
     primary: "#8941FF", // purple
@@ -18,6 +19,7 @@ const theme = {
 ReactDOM.render(
     <ThemeProvider theme={theme}>
         <Normalize />
+        <GlobalStyles />
         <App />
     </ThemeProvider>,
     document.getElementById("root")
