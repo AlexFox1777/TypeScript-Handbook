@@ -65,12 +65,12 @@ const InsertionSort: FunctionComponent<Partial<Props>> = ({
                     inputArr[j + 1]
                 );
             }
+
+            setHistory((prev) => [[...inputArr], ...prev]);
+
+            let iterInfo = `i=${iter.i}, j=${iter.j}, key=${iter.key}`;
+            setInfo((prev) => [iterInfo, ...info]);
         }
-
-        setHistory((prev) => [[...inputArr], ...prev]);
-
-        let iterInfo = `i=${iter.i}, j=${iter.j}, key=${iter.key}`;
-        setInfo((prev) => [iterInfo, ...info]);
 
         setNms(inputArr);
     };
@@ -78,8 +78,13 @@ const InsertionSort: FunctionComponent<Partial<Props>> = ({
     return (
         <Root>
             <Pannel>
-                <ArrowBtn>←</ArrowBtn>
-                <ArrowBtn onClick={() => iSNext(nms)}>→</ArrowBtn>
+                <ArrowBtn isActive={iter.i > 2}>←</ArrowBtn>
+                <ArrowBtn
+                    onClick={() => iter.i < nms.length && iSNext(nms)}
+                    isActive={iter.i < nms.length}
+                >
+                    →
+                </ArrowBtn>
             </Pannel>
 
             <List>
@@ -127,19 +132,20 @@ const List = styled.div`
     justify-content: center;
 `;
 
-const ArrowBtn = styled.button`
+const ArrowBtn = styled.button<{ isActive: boolean }>`
     cursor: pointer;
     margin: 2%;
     min-width: 4rem;
     height: 35px;
     border: none;
-    background: #20bbe0;
+    background: ${(props) => (props.isActive ? "#20bbe0" : "#b5ced4")};
     border-radius: 4px;
     color: white;
     font-size: 2rem;
     outline: none;
+    cursor: ${(props) => (props.isActive ? "pointer" : "not-allowed")};
     &:hover {
-        background: #0a91b1;
+        background: ${(props) => (props.isActive ? "#0a91b1" : "#b5ced4")};
     }
 `;
 
