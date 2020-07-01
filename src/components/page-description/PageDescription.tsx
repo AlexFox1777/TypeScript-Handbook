@@ -6,6 +6,7 @@ type Props = {
     description: string;
     complexity: string; // time complexity
     algorithm: React.ReactNode;
+    algorithmDescription: Array<string>;
 };
 
 const PageDescrioption: FunctionComponent<Partial<Props>> = ({
@@ -13,6 +14,7 @@ const PageDescrioption: FunctionComponent<Partial<Props>> = ({
     description,
     complexity,
     algorithm,
+    algorithmDescription = [],
 }) => {
     return (
         <div>
@@ -20,6 +22,7 @@ const PageDescrioption: FunctionComponent<Partial<Props>> = ({
                 title={title}
                 description={description}
                 complexity={complexity}
+                algorithm={algorithmDescription}
             />
             {/* Algorithm component */}
             {algorithm}

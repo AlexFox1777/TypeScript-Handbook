@@ -5,11 +5,13 @@ import styled from "styled-components";
 type Props = {
     history: Array<Array<number>>;
     info: Array<string>;
+    sorted: number;
 };
 
 const History: FunctionComponent<Partial<Props>> = ({
     history = [[]],
     info = [],
+    sorted = 0,
 }) => {
     return (
         <Root>
@@ -38,14 +40,6 @@ const History: FunctionComponent<Partial<Props>> = ({
                                                 0
                                                     ? "#ade0dd"
                                                     : "white"
-                                            }
-                                            state={
-                                                history.length -
-                                                    indexI -
-                                                    indexJ >
-                                                0
-                                                    ? "previous"
-                                                    : "x"
                                             }
                                         ></NumberHolder>
                                     ))}
