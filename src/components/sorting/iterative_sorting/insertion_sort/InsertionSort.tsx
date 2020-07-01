@@ -46,6 +46,9 @@ const InsertionSort: FunctionComponent<Partial<Props>> = ({
             if (j >= 0 && inputArr[j] > key) {
                 inputArr[j + 1] = inputArr[j];
                 setIter({ ...iter, j: j - 1 });
+
+                let iterInfo = `i=${i}, j=${j - 1}, key=${key}`;
+                setInfo((prev) => [iterInfo, ...info]);
             } else {
                 inputArr[j + 1] = key;
                 setIter({
@@ -54,12 +57,10 @@ const InsertionSort: FunctionComponent<Partial<Props>> = ({
                     j: i,
                     key: numbers[i + 1],
                 });
+                let iterInfo = `i=${i + 1}, j=${i}, key=${numbers[i + 1]}`;
+                setInfo((prev) => [iterInfo, ...info]);
             }
-
             setHistory((prev) => [[...inputArr], ...prev]);
-
-            let iterInfo = `i=${iter.i}, j=${iter.j}, key=${iter.key}`;
-            setInfo((prev) => [iterInfo, ...info]);
         }
 
         setNms(inputArr);
@@ -67,9 +68,16 @@ const InsertionSort: FunctionComponent<Partial<Props>> = ({
 
     let iBack = () => {
         if (iter.i >= 2) {
-            setIter({ i: iter.i - 2, j: iter.j - 2, key: numbers[iter.i - 2] });
             let lastHistory = history[1].slice();
-            console.log("Last history ", lastHistory);
+            let lastInfo = info[1].split(", ");
+
+            let i = lastInfo[0].slice(2, lastInfo[0].length);
+            let j = lastInfo[1].slice(2, lastInfo[1].length);
+            let key = lastInfo[2].slice(4, lastInfo[2].length);
+            console.log(i, j, key);
+            setIter({ i: parseInt(i), j: parseInt(j), key: parseInt(key) });
+            setHistory((prev) => [...prev.slice(1, prev.length)]);
+            setInfo((prev) => [...prev.slice(1, prev.length)]);
             setNms(lastHistory);
         }
     };
