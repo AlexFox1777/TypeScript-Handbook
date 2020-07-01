@@ -6,12 +6,14 @@ type Props = {
     title: string;
     description: string;
     complexity: string; // time complexity
+    algorithm: Array<string>;
 };
 
 const Description: FunctionComponent<Partial<Props>> = ({
     title = "Title",
     description = "Description",
     complexity = "O(n)",
+    algorithm = [],
 }) => {
     return (
         <Root>
@@ -19,6 +21,11 @@ const Description: FunctionComponent<Partial<Props>> = ({
             <Typography lg>{title}</Typography>
             <Typography secondary>{complexity}</Typography>
             <Typography>{description}</Typography>
+            {algorithm.length > 0 && (
+                <Typography className="sub-title">Algorithm</Typography>
+            )}
+            {algorithm.length > 0 &&
+                algorithm.map((item) => <Typography>● {item}</Typography>)}
         </Root>
     );
 };
@@ -26,6 +33,10 @@ const Description: FunctionComponent<Partial<Props>> = ({
 const Root = styled.div`
     min-width: 340px;
     margin: 10px;
+    .sub-title {
+        font-size: 1.2em;
+        font-weight: 500;
+    }
     .breaker {
         background: #5bdfff;
         width: 10px;
