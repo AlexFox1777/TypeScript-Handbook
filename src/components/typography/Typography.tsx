@@ -92,8 +92,6 @@ const Typography: FunctionComponent<Partial<Props>> = ({
 export default Typography;
 
 const Text = styled.p<Partial<Props>>`
-    padding: 0;
-    margin: 0;
     font-size: ${(props) => props.size + "em"};
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
         "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",

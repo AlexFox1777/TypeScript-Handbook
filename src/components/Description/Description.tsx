@@ -17,19 +17,24 @@ const Description: FunctionComponent<Partial<Props>> = ({
         <Root>
             <div className="breaker"></div>
             <Typography lg>{title}</Typography>
-            <Typography>{description}</Typography>
             <Typography secondary>{complexity}</Typography>
+            <Typography>{description}</Typography>
         </Root>
     );
 };
 
 const Root = styled.div`
+    min-width: 340px;
+    margin: 10px;
     .breaker {
         background: #5bdfff;
         width: 10px;
         height: 150px;
         float: left;
         margin-right: 2%;
+    }
+    & > p {
+        margin-bottom: 15px;
     }
 `;
 
