@@ -57,7 +57,9 @@ const InsertionSort: FunctionComponent<Partial<Props>> = ({
                     j: i,
                     key: numbers[i + 1],
                 });
-                let iterInfo = `i=${i + 1}, j=${i}, key=${numbers[i + 1]}`;
+                let iterInfo = numbers[i + 1]
+                    ? `i=${i + 1}, j=${i}, key=${numbers[i + 1]}`
+                    : "sorted";
                 setInfo((prev) => [iterInfo, ...info]);
             }
             setHistory((prev) => [[...inputArr], ...prev]);
@@ -67,14 +69,14 @@ const InsertionSort: FunctionComponent<Partial<Props>> = ({
     };
 
     let iBack = () => {
-        if (iter.i >= 2) {
+        if (iter.i >= 1) {
             let lastHistory = history[1].slice();
             let lastInfo = info[1].split(", ");
 
             let i = lastInfo[0].slice(2, lastInfo[0].length);
             let j = lastInfo[1].slice(2, lastInfo[1].length);
             let key = lastInfo[2].slice(4, lastInfo[2].length);
-            console.log(i, j, key);
+
             setIter({ i: parseInt(i), j: parseInt(j), key: parseInt(key) });
             setHistory((prev) => [...prev.slice(1, prev.length)]);
             setInfo((prev) => [...prev.slice(1, prev.length)]);
@@ -86,8 +88,8 @@ const InsertionSort: FunctionComponent<Partial<Props>> = ({
         <Root>
             <Pannel>
                 <ArrowBtn
-                    onClick={() => iter.i > 2 && iBack()}
-                    isActive={iter.i > 2}
+                    onClick={() => history.length > 1 && iBack()}
+                    isActive={history.length > 1}
                 >
                     ←
                 </ArrowBtn>
