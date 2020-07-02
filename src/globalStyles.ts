@@ -23,6 +23,9 @@ time, mark, audio, video {
 html{
     height: 100%;
 }
+* {
+    box-sizing: border-box;
+}
 body {
     margin: 0;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
