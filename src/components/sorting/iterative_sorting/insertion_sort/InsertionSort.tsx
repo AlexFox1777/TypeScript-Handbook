@@ -1,7 +1,8 @@
-import React, { FunctionComponent, useState } from "react";
+import React, { FunctionComponent, useState, useContext } from "react";
 import NumberHolder from "../../../number-holder/NumberHolder";
 import styled from "styled-components";
 import History from "../../../history/History";
+import { DisplayContext } from "../../../contexts/DisplayContext";
 
 type Props = {
     numbers: Array<number>;
@@ -16,6 +17,7 @@ const InsertionSort: FunctionComponent<Partial<Props>> = ({
         `i=1, j=0, key=${numbers[1]}`,
     ]);
     const [iter, setIter] = useState({ i: 1, j: 0, key: numbers[1] });
+    const payload = useContext(DisplayContext);
 
     let insertionSort = (
         arr: Array<{ number: number; state: "current" | "previous" | "x" }>
@@ -37,7 +39,6 @@ const InsertionSort: FunctionComponent<Partial<Props>> = ({
     };
 
     let iSNext = (arr: Array<number>) => {
-        console.log("Hello");
         let inputArr = arr.slice();
         let j = iter.j,
             key = iter.key,
@@ -49,6 +50,9 @@ const InsertionSort: FunctionComponent<Partial<Props>> = ({
 
                 let iterInfo = `i=${i}, j=${j - 1}, key=${key}`;
                 setInfo((prev) => [iterInfo, ...info]);
+                payload?.setDisplayData(
+                    `While ${inputArr[j]} is greater then ${key}`
+                );
             } else {
                 inputArr[j + 1] = key;
                 setIter({

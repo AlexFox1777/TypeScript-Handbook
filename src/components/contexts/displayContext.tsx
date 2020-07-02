@@ -5,8 +5,6 @@ type Props = {
     inputData: Array<number>;
     setInputData: (input: Array<number>) => void;
 };
-export const displayContext = createContext<Partial<Props> | undefined>(
-    undefined
-);
-export const Provider = displayContext.Provider;
-export const Consumer = displayContext.Consumer;
+export const DisplayContext = createContext<Props | undefined>(undefined);
+export const Provider = DisplayContext.Provider;
+export const Consumer = DisplayContext.Consumer;
