@@ -1,33 +1,28 @@
-import React, { FunctionComponent, useState, useContext } from "react";
+import React, {
+    FunctionComponent,
+    useState,
+    useContext,
+    useReducer,
+} from "react";
 import Description from "../../../description/Description";
 import InsertionSort from "./InsertionSort";
-import { Provider, DisplayContext } from "../../../contexts/DisplayContext";
+import { Provider, DisplayProvider } from "../../../contexts/DisplayContext";
 import Display from "../../../display/Display";
 
 const PageDescrioption: FunctionComponent = () => {
-    const [displayData, setData] = useState("");
-    const [inputData, setInputData] = useState<Array<number>>([]);
-    const payload = useContext(DisplayContext);
-
-    const setDisplayData = (message: string) => {
-        setData(message);
-    };
-
     return (
-        <Provider
-            value={{ displayData, setDisplayData, inputData, setInputData }}
-        >
+        <DisplayProvider>
             <Description
                 title={INSERTION_SORT.title}
                 description={INSERTION_SORT.description}
                 complexity={INSERTION_SORT.complexity}
                 algorithm={INSERTION_SORT.algorithm}
             />
-            <Display message={payload?.displayData} />
+            <Display />
             {/* Algorithm component */}
             <InsertionSort />
             {/* History */}
-        </Provider>
+        </DisplayProvider>
     );
 };
 const INSERTION_SORT = {
