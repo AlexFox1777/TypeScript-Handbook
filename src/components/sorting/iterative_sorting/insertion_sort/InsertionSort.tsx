@@ -1,4 +1,9 @@
-import React, { FunctionComponent, useState, useContext } from "react";
+import React, {
+    FunctionComponent,
+    useState,
+    useContext,
+    useEffect,
+} from "react";
 import NumberHolder from "../../../number-holder/NumberHolder";
 import styled from "styled-components";
 import History from "../../../history/History";
@@ -17,25 +22,33 @@ const InsertionSort: FunctionComponent<Partial<Props>> = ({
         `i=1, j=0, key=${numbers[1]}`,
     ]);
     const [iter, setIter] = useState({ i: 1, j: 0, key: numbers[1] });
+
     const payload = useContext(DisplayContext);
 
-    let insertionSort = (
-        arr: Array<{ number: number; state: "current" | "previous" | "x" }>
-    ) => {
-        let inputArr = arr.slice();
-        let length = inputArr.length;
-        for (let i = 1; i < length; i++) {
-            let key = inputArr[i].number;
-            inputArr[i].state = "current";
-            let j = i - 1;
-            while (j >= 0 && inputArr[j].number > key) {
-                inputArr[j + 1].number = inputArr[j].number;
-                j = j - 1;
-            }
-            inputArr[j + 1].number = key;
-            inputArr[j + 1].state = "previous";
+    useEffect(() => {
+        if (iter.j >= 0 && nms[iter.j] > iter.key) {
+            payload?.setDisplayData([
+                `Is ${nms[iter.j]} greater then ${iter.key} ?`,
+                `i=${iter.i}`,
+            ]);
         }
-        return inputArr;
+    }, []);
+
+    const setDisplay = (i: number, j: number, key: number) => {
+        if (j >= 0 && nms[j] > key) {
+            payload?.setDisplayData([
+                `While ${nms[j]} is greater then ${key} ==> put ${nms[j]} on ${
+                    j + 1
+                } array index`,
+                `i=${i}`,
+            ]);
+        } else {
+            let display1 = key
+                ? `==> Put ${key} on ${j + 1} array index`
+                : "SORTED";
+            let display2 = key ? `i=${i}` : "";
+            payload?.setDisplayData([display1, display2]);
+        }
     };
 
     let iSNext = (arr: Array<number>) => {
@@ -47,12 +60,9 @@ const InsertionSort: FunctionComponent<Partial<Props>> = ({
             if (j >= 0 && inputArr[j] > key) {
                 inputArr[j + 1] = inputArr[j];
                 setIter({ ...iter, j: j - 1 });
-
                 let iterInfo = `i=${i}, j=${j - 1}, key=${key}`;
                 setInfo((prev) => [iterInfo, ...info]);
-                payload?.setDisplayData(
-                    `While ${inputArr[j]} is greater then ${key}`
-                );
+                setDisplay(i, j - 1, key);
             } else {
                 inputArr[j + 1] = key;
                 setIter({
@@ -65,6 +75,7 @@ const InsertionSort: FunctionComponent<Partial<Props>> = ({
                     ? `i=${i + 1}, j=${i}, key=${numbers[i + 1]}`
                     : "sorted";
                 setInfo((prev) => [iterInfo, ...info]);
+                setDisplay(i + 1, i, numbers[i + 1]);
             }
             setHistory((prev) => [[...inputArr], ...prev]);
         }
