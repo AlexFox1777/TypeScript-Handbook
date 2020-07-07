@@ -55,7 +55,7 @@ const Root = styled.div<RootProps>`
     .number-box {
         background: ${(props) => (props.history ? "" : "green")};
         padding: ${(props) =>
-            props.history ? "0 1rem 0 1rem" : "0.8rem 1rem 0.8rem 1rem"};
+            props.history ? "0.3rem 0.4rem" : "0.3rem 0.6rem"};
         border-radius: 4px;
     }
 `;

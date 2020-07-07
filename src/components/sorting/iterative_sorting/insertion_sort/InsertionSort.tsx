@@ -8,6 +8,8 @@ import NumberHolder from "../../../number-holder/NumberHolder";
 import styled from "styled-components";
 import History from "../../../history/History";
 import { DisplayContext } from "../../../contexts/DisplayContext";
+import usePrevious from "../../../../hooks/usePrevious";
+import InputForm from "../../../inputForm/InputForm";
 
 type Props = {
     numbers: Array<number>;
@@ -16,37 +18,53 @@ type Props = {
 const InsertionSort: FunctionComponent<Partial<Props>> = ({
     numbers = [5, 2, 7, 6, 1, 3, 4],
 }) => {
-    const [nms, setNms] = useState(numbers);
+    const payload = useContext(DisplayContext);
+    const [nms, setNms] = useState(
+        payload?.inputData && payload.inputData.length > 0
+            ? payload.inputData
+            : numbers
+    );
     const [history, setHistory] = useState([numbers]);
     const [info, setInfo] = useState<Array<string>>([
         `i=1, j=0, key=${numbers[1]}`,
     ]);
     const [iter, setIter] = useState({ i: 1, j: 0, key: numbers[1] });
-
-    const payload = useContext(DisplayContext);
+    const iterPrevious = usePrevious(iter, iter);
 
     useEffect(() => {
-        if (iter.j >= 0 && nms[iter.j] > iter.key) {
-            payload?.setDisplayData([
-                `Is ${nms[iter.j]} greater then ${iter.key} ?`,
-                `i=${iter.i}`,
-            ]);
-        }
+        let display1 = "This is the begining of logs ",
+            display2 = " ";
+        payload?.pushDisplayHistory([display1, display2]);
+        payload?.setDisplayData([display1, display2]);
     }, []);
+    useEffect(() => {
+        if (payload?.inputData && payload.inputData.length > 0) {
+            let nmsArr = payload.inputData;
+            setNms(nmsArr);
+            setHistory([nmsArr]);
+            setInfo([`i=1 j=0 key=${nmsArr[1]}`]);
+            setIter({ ...iter, key: nmsArr[1] });
+        }
+    }, [payload?.inputData]);
 
     const setDisplay = (i: number, j: number, key: number) => {
         if (j >= 0 && nms[j] > key) {
-            payload?.setDisplayData([
-                `While ${nms[j]} is greater then ${key} ==> put ${nms[j]} on ${
-                    j + 1
-                } array index`,
-                `i=${i}`,
-            ]);
+            let display1 = `While j(${
+                nms[j]
+            }) is greater then key(${key}) and (j > key) ==> put ${nms[j]} on ${
+                j + 1
+            } array index`;
+            let display2 = `i=${i}`;
+
+            payload?.pushDisplayHistory([display1, display2]);
+            payload?.setDisplayData([display1, display2]);
         } else {
             let display1 = key
-                ? `==> Put ${key} on ${j + 1} array index`
+                ? `Else ==> Put ${key} on ${j + 1} array index`
                 : "SORTED";
             let display2 = key ? `i=${i}` : "";
+
+            payload?.pushDisplayHistory([display1, display2]);
             payload?.setDisplayData([display1, display2]);
         }
     };
@@ -62,7 +80,7 @@ const InsertionSort: FunctionComponent<Partial<Props>> = ({
                 setIter({ ...iter, j: j - 1 });
                 let iterInfo = `i=${i}, j=${j - 1}, key=${key}`;
                 setInfo((prev) => [iterInfo, ...info]);
-                setDisplay(i, j - 1, key);
+                setDisplay(i, j, key);
             } else {
                 inputArr[j + 1] = key;
                 setIter({
@@ -75,7 +93,10 @@ const InsertionSort: FunctionComponent<Partial<Props>> = ({
                     ? `i=${i + 1}, j=${i}, key=${numbers[i + 1]}`
                     : "sorted";
                 setInfo((prev) => [iterInfo, ...info]);
-                setDisplay(i + 1, i, numbers[i + 1]);
+
+                numbers[i + 1]
+                    ? setDisplay(i, j, key)
+                    : setDisplay(i + 1, i, numbers[i + 1]);
             }
             setHistory((prev) => [[...inputArr], ...prev]);
         }
@@ -96,11 +117,17 @@ const InsertionSort: FunctionComponent<Partial<Props>> = ({
             setHistory((prev) => [...prev.slice(1, prev.length)]);
             setInfo((prev) => [...prev.slice(1, prev.length)]);
             setNms(lastHistory);
+
+            payload?.popDisplayHistory();
+            payload?.setDisplayData(
+                payload?.displayHistory ? payload?.displayHistory[1] : undefined
+            );
         }
     };
 
     return (
         <Root>
+            <InputForm />
             <Pannel>
                 <ArrowBtn
                     onClick={() => history.length > 1 && iBack()}
@@ -123,9 +150,9 @@ const InsertionSort: FunctionComponent<Partial<Props>> = ({
                         <NumberHolder
                             number={item}
                             state={
-                                index === iter.i
+                                index === iterPrevious.i
                                     ? "current"
-                                    : index === iter.j
+                                    : index === iterPrevious.j
                                     ? "previous"
                                     : "x"
                             }
