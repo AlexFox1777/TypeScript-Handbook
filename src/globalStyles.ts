@@ -39,4 +39,8 @@ body {
 h1,h2,h3,h4,h5,h6{
     font-family: 'Federo', sans-serif;
 }
+
+#root{
+    min-width: 350px;
+}
 `;

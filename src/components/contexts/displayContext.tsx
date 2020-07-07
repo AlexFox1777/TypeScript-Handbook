@@ -5,6 +5,7 @@ type Props = {
     setDisplayData: (display: [string, string] | undefined) => void;
 
     displayHistory: Array<[string, string]> | undefined;
+    setDisplayHistoy: (history: Array<[string, string]> | undefined) => void;
     pushDisplayHistory: (newData: [string, string]) => void;
     popDisplayHistory: () => void;
 
@@ -19,7 +20,7 @@ export const DisplayProvider: FunctionComponent = ({ children }) => {
     const [displayData, setDisplay] = useState<[string, string]>(["", ""]);
     const [inputData, setInput] = useState<Array<number>>([]);
 
-    const [displayHistory, setDisplayHistory] = useState<
+    const [displayHistory, setDH] = useState<
         Array<[string, string]> | undefined
     >();
 
@@ -28,12 +29,13 @@ export const DisplayProvider: FunctionComponent = ({ children }) => {
     const setInputData = (input: Array<number>) => setInput(input);
 
     const pushDisplayHistory = (newData: [string, string]) =>
-        setDisplayHistory((prev) => (prev ? [newData, ...prev] : [newData]));
+        setDH((prev) => (prev ? [newData, ...prev] : [newData]));
 
     const popDisplayHistory = () =>
-        setDisplayHistory((prev) =>
-            prev ? [...prev?.slice(1, prev.length)] : undefined
-        );
+        setDH((prev) => (prev ? [...prev?.slice(1, prev.length)] : undefined));
+
+    const setDisplayHistoy = (history: Array<[string, string]> | undefined) =>
+        setDH(history);
 
     return (
         <Provider
@@ -45,6 +47,7 @@ export const DisplayProvider: FunctionComponent = ({ children }) => {
                 displayHistory,
                 pushDisplayHistory,
                 popDisplayHistory,
+                setDisplayHistoy,
             }}
         >
             {children}

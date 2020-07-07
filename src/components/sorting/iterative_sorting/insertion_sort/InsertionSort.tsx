@@ -19,17 +19,13 @@ const InsertionSort: FunctionComponent<Partial<Props>> = ({
     numbers = [5, 2, 7, 6, 1, 3, 4],
 }) => {
     const payload = useContext(DisplayContext);
-    const [nms, setNms] = useState(
-        payload?.inputData && payload.inputData.length > 0
-            ? payload.inputData
-            : numbers
-    );
+    const [nms, setNms] = useState(numbers);
     const [history, setHistory] = useState([numbers]);
     const [info, setInfo] = useState<Array<string>>([
         `i=1, j=0, key=${numbers[1]}`,
     ]);
     const [iter, setIter] = useState({ i: 1, j: 0, key: numbers[1] });
-    const iterPrevious = usePrevious(iter, iter);
+    let [iterPrevious, setIterPrv] = usePrevious(iter, iter);
 
     useEffect(() => {
         let display1 = "This is the begining of logs ",
@@ -38,12 +34,21 @@ const InsertionSort: FunctionComponent<Partial<Props>> = ({
         payload?.setDisplayData([display1, display2]);
     }, []);
     useEffect(() => {
+        console.log("I AM HERE");
         if (payload?.inputData && payload.inputData.length > 0) {
             let nmsArr = payload.inputData;
             setNms(nmsArr);
             setHistory([nmsArr]);
             setInfo([`i=1 j=0 key=${nmsArr[1]}`]);
-            setIter({ ...iter, key: nmsArr[1] });
+            let iterObj = { i: 1, j: 0, key: nmsArr[1] };
+            setIter(iterObj);
+            let display1 = "This is the begining of logs ",
+                display2 = " ";
+
+            payload.setDisplayHistoy([[display1, display2]]);
+            payload?.setDisplayData([display1, display2]);
+
+            setIterPrv(iterObj);
         }
     }, [payload?.inputData]);
 
@@ -60,7 +65,7 @@ const InsertionSort: FunctionComponent<Partial<Props>> = ({
             payload?.setDisplayData([display1, display2]);
         } else {
             let display1 = key
-                ? `Else ==> Put ${key} on ${j + 1} array index`
+                ? ` ==> Put ${key} on ${j + 1} array index`
                 : "SORTED";
             let display2 = key ? `i=${i}` : "";
 
@@ -87,16 +92,16 @@ const InsertionSort: FunctionComponent<Partial<Props>> = ({
                     ...iter,
                     i: i + 1,
                     j: i,
-                    key: numbers[i + 1],
+                    key: nms[i + 1],
                 });
-                let iterInfo = numbers[i + 1]
-                    ? `i=${i + 1}, j=${i}, key=${numbers[i + 1]}`
+                let iterInfo = nms[i + 1]
+                    ? `i=${i + 1}, j=${i}, key=${nms[i + 1]}`
                     : "sorted";
                 setInfo((prev) => [iterInfo, ...info]);
 
-                numbers[i + 1]
+                nms[i + 1]
                     ? setDisplay(i, j, key)
-                    : setDisplay(i + 1, i, numbers[i + 1]);
+                    : setDisplay(i + 1, i, nms[i + 1]);
             }
             setHistory((prev) => [[...inputArr], ...prev]);
         }
